@@ -28,10 +28,10 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="card-text">Цена: <span th:utext="${product.price}"></span></p>
                                 <div class="btn-group">
-                                    <form th:action="@{/removeFromBasket}" th:method="post" >
+                                    <form th:action="@{/removeFromCart}" th:method="post" >
                                         <button type="submit" th:name="productId" th:value="${product.productId}" class="btn btn-sm btn-outline-secondary">-</button>
                                     </form>
-                                    <form th:action="@{/addToBasket}" th:method="post" >
+                                    <form th:action="@{/addToCart}" th:method="post">
                                         <button type="submit" th:name="productId" th:value="${product.productId}" class="btn btn-sm btn-outline-secondary">+</button>
                                     </form>
                                 </div>
@@ -42,7 +42,7 @@
                                     <span th:if="${product.quantity} > 50">50+</span>
                                     <span th:unless="${product.quantity} > 50" th:utext="${product.quantity}"></span>
                                 </small>
-                                <small class="text-muted">В корзине: <span th:utext="${productsInBasket.get(product.productId)}"></span></small>
+                                <small class="text-muted">В корзине: <span th:utext="${productsInCart.get(product.productId)}"></span></small>
                             </div>
                         </div>
 

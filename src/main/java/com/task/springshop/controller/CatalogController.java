@@ -1,47 +1,47 @@
 package com.task.springshop.controller;
 
-import com.task.springshop.formal.repository.OrderProductRepository;
-import com.task.springshop.formal.repository.ProductsRepository;
-import com.task.springshop.model.entity.Product;
+import com.task.springshop.service.CartProductService;
+import com.task.springshop.service.ProductService;
+import com.task.springshop.util.CartProducts;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.*;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
+@SessionAttributes("productsInCart")
 public class CatalogController {
-    private final ProductsRepository temporaryProducts = ProductsRepository.getInstance();
-    private final OrderProductRepository productsInBasket = OrderProductRepository.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(CatalogController.class);
+    private final ProductService productService;
+    private final CartProductService cartProductService;
+
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("allProducts", productService.findAll());
+        if (model.getAttribute("productsInCart") == null) {
+            model.addAttribute("productsInCart", new CartProducts());
+        }
+    }
 
     @GetMapping(value = {"/", "/index", "/catalog"})
-    public String mainFeed(@RequestParam Optional<List<Product>> product, Model model) {
-        List<Product> allProducts = product.orElse(temporaryProducts.getAll());
-        model.addAttribute("allProducts", allProducts);
-        model.addAttribute("productsInBasket", productsInBasket.getAll());
+    public String mainFeed() {
         return "product-catalog";
     }
 
-    @PostMapping("/addToBasket")
-    public String addToBasket(@RequestParam long productId, Model model) {
-        int quantity = productsInBasket.get(productId);
-        productsInBasket.replace(productId, quantity + 1);
-        model.addAttribute("allProducts", temporaryProducts.getAll());
-        model.addAttribute("productsInBasket", productsInBasket.getAll());
+    @PostMapping("/addToCart")
+    public String addToCart(@ModelAttribute("productsInCart") CartProducts productsInCart, @RequestParam Long productId) {
+        cartProductService.addProduct(productsInCart, productId);
+
         return "product-catalog";
     }
 
-    @PostMapping("/removeFromBasket")
-    public String removeFromBasket(@RequestParam long productId, Model model) {
-        int quantity = productsInBasket.get(productId);
-        if (quantity > 0)
-        {
-            productsInBasket.replace(productId, quantity - 1);
-        }
-        model.addAttribute("allProducts", temporaryProducts.getAll());
-        model.addAttribute("productsInBasket", productsInBasket.getAll());
+    @PostMapping("/removeFromCart")
+    public String removeFromCart(@ModelAttribute("productsInCart") CartProducts productsInCart, @RequestParam Long productId) {
+        cartProductService.removeProduct(productsInCart, productId);
+
         return "product-catalog";
     }
 }

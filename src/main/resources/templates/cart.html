@@ -17,7 +17,7 @@
 
     <table class="table">
         <div th:each="product: ${allProducts}">
-            <tbody th:if="${productsInBasket.get(product.productId)} != 0">
+            <tbody th:if="${productsInCart.containsKey(product.productId)}">
             <tr>
                 <td><img th:src="${product.imageUrl}" class="basket-image" width="100%" height="100%" alt="..."></td>
                 <td><p class="product-name basket-product-name" th:utext="${product.name}"></p></td>
@@ -25,11 +25,11 @@
                 <td>
                     <div class="list-view">
                         <div class="btn-group">
-                            <form th:action="@{/removeInBasket}" th:method="post" >
+                            <form th:action="@{/removeInCart}" th:method="post" >
                                 <button type="submit" th:name="productId" th:value="${product.productId}" class="btn btn-sm btn-secondary">-</button>
                             </form>
-                            <p class="btn" th:utext="${productsInBasket.get(product.productId)}"></p>
-                            <form th:action="@{/addInBasket}" th:method="post" >
+                            <p class="btn" th:utext="${productsInCart.get(product.productId)}"></p>
+                            <form th:action="@{/addInCart}" th:method="post" >
                                 <button type="submit" th:name="productId" th:value="${product.productId}" class="btn btn-sm btn-secondary">+</button>
                             </form>
                         </div>
@@ -45,24 +45,30 @@
     </table>
 
     </br>
+    <div th:field="${productsInCart.productQuantity}" th:if="${#fields.hasErrors('productsInCart.productQuantity')}"
+         th:errors="${productsInCart.productQuantity}">Quantity Error</div>
+
     </br>
-    <form action="/makeOrder" method="post">
+    <form th:action="@{/makeOrder}" th:method="post">
         <div class="row col-md-12">
             <div class="input-group mb-3">
                 <span class="input-group-text">Имя и фамилия</span>
-                <input type="text" name="name" class="form-control">
-                <input type="text" name="surname" class="form-control">
+                <input type="text" name="name" th:field="${order.name}" class="form-control">
+                <input type="text" name="surname" th:field="${order.surname}" class="form-control">
             </div>
+            <div th:if="${#fields.hasErrors('order.name')}" th:errors="${order.name}">Name Error</div>
+            <div th:if="${#fields.hasErrors('order.surname')}" th:errors="${order.surname}">Surname Error</div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Адрес</span>
-                <input type="text" class="form-control" name="address" aria-describedby="inputGroup-sizing-default">
+                <input type="text" class="form-control" name="address" th:field="${order.address}" aria-describedby="inputGroup-sizing-default">
             </div>
+            <div th:if="${#fields.hasErrors('order.address')}" th:errors="${order.address}">Address Error</div>
 
             <div class="input-group mb-3">
                 <select class="form-select" name="receivingWay">
                     <option selected>Доставка (5.00 руб.)</option>
-                    <option value="1">Самовывоз из магазина по адресу такому-то (бесплатно)</option>
+                    <option value="Самовывоз из магазина по адресу такому-то">Самовывоз из магазина по адресу такому-то (бесплатно)</option>
                 </select>
             </div>
         </div>

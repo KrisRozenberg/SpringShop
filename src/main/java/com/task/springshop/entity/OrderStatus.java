@@ -1,4 +1,4 @@
-package com.task.springshop.model.entity;
+package com.task.springshop.entity;
 
 public enum OrderStatus {
     IN_PROCESS,

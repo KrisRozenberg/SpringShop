@@ -6,8 +6,7 @@ import com.task.springshop.service.OrderService;
 import com.task.springshop.service.ProductService;
 import com.task.springshop.util.CartProducts;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,9 +17,9 @@ import java.math.BigDecimal;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 @SessionAttributes("productsInCart")
 public class CartController {
-    private static final Logger logger = LoggerFactory.getLogger(CartController.class);
     private final ProductService productService;
     private final CartProductService cartProductService;
     private final OrderService orderService;
@@ -53,12 +52,16 @@ public class CartController {
                             @ModelAttribute("order") @Valid Order order, BindingResult bindingResult2,
                             @RequestParam String receivingWay, Model model) {
         if (bindingResult1.hasErrors() || bindingResult2.hasErrors()) {
-            logger.debug("Fields errors 1 and 2: {}, {}", bindingResult1.getErrorCount(), bindingResult2.getErrorCount());
+            log.debug("Fields errors 1 and 2: {}, {}", bindingResult1.getErrorCount(), bindingResult2.getErrorCount());
+
             return "cart";
         }
+
         BigDecimal price = cartProductService.calculateOrderPrice(productsInCart, receivingWay);
+
         orderService.addUnsignedOrder(productsInCart, price, receivingWay, order.getName(), order.getSurname(),
                 order.getAddress());
+
         productsInCart.clear();
         model.addAttribute("orderMessage", "Your order is in process!");
         return "cart";

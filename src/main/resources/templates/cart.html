@@ -49,21 +49,21 @@
          th:errors="${productsInCart.productQuantity}">Quantity Error</div>
 
     </br>
-    <form th:action="@{/makeOrder}" th:method="post" th:object="${order}">
+    <form th:action="@{/makeOrder}" th:method="post">
         <div class="row col-md-12">
             <div class="input-group mb-3">
                 <span class="input-group-text">Имя и фамилия</span>
-                <input type="text" name="name" th:field="*{name}" class="form-control">
-                <input type="text" name="surname" th:field="*{surname}" class="form-control">
+                <input type="text" name="name" th:field="${order.name}" class="form-control">
+                <input type="text" name="surname" th:field="${order.surname}" class="form-control">
             </div>
-            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-            <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
+            <div th:if="${#fields.hasErrors('order.name')}" th:errors="${order.name}">Name Error</div>
+            <div th:if="${#fields.hasErrors('order.surname')}" th:errors="${order.surname}">Surname Error</div>
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Адрес</span>
-                <input type="text" class="form-control" name="address" th:field="*{address}" aria-describedby="inputGroup-sizing-default">
+                <input type="text" class="form-control" name="address" th:field="${order.address}" aria-describedby="inputGroup-sizing-default">
             </div>
-            <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</div>
+            <div th:if="${#fields.hasErrors('order.address')}" th:errors="${order.address}">Address Error</div>
 
             <div class="input-group mb-3">
                 <select class="form-select" name="receivingWay">

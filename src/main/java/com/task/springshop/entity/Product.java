@@ -1,5 +1,6 @@
 package com.task.springshop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,7 @@ public class Product {
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
 
+    @JsonIgnore
     @OneToMany(mappedBy="product")
     private Set<CartProduct> cartProducts;
 

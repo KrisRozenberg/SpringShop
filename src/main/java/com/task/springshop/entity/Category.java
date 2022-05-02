@@ -1,5 +1,6 @@
 package com.task.springshop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class Category {
     @JoinColumn(name="parent_category_id")
     private Category parentCategory;
 
+    @JsonIgnore
     @OneToMany(mappedBy="parentCategory")
     private Set<Category> categories;
 

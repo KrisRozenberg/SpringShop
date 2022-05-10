@@ -18,7 +18,7 @@ public class CartProductServiceImpl implements CartProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public BigDecimal calculateOrderPrice(Map<Long, Integer> productsInCart, String receivingWay) {
+    public BigDecimal calculateOrderPrice(Map<Long, Integer> productsInCart, boolean isDelivery) {
         BigDecimal result = BigDecimal.ZERO;
         Set<Long> productId = productsInCart.keySet();
 
@@ -30,7 +30,7 @@ public class CartProductServiceImpl implements CartProductService {
             }
         }
 
-        if (receivingWay.equals("Доставка (5.00 руб.)")) {
+        if (isDelivery) {
             result = result.add(BigDecimal.valueOf(5));
         }
 

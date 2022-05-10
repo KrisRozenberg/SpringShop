@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ProductQuantity {
-    String message() default "Please order available count of product!";
+    String message() default "Please order available count of product.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

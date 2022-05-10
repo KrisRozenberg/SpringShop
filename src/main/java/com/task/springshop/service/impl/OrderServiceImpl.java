@@ -27,11 +27,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order addUnsignedOrder(OrderInfo orderInfo, BigDecimal price) {
-        if (!orderInfo.getReceivingWay().equals("Доставка (5.00 руб.)")) {
-            orderInfo.setAddress(orderInfo.getReceivingWay());
-        }
-
+    public void addUnsignedOrder(OrderInfo orderInfo, BigDecimal price) {
         Order order = new Order(LocalDate.now(), price, orderInfo.getAddress(), OrderStatus.IN_PROCESS, orderInfo.getName(),
                 orderInfo.getSurname(), new HashSet<>());
 
@@ -50,8 +46,6 @@ public class OrderServiceImpl implements OrderService {
                 cartProductRepository.save(cartProduct);
             }
         });
-
-        return order;
     }
 }
 

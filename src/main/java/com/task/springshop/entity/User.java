@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Table (name = "users")
 public class User {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
 
@@ -27,7 +27,7 @@ public class User {
     @Column(nullable = false, length = 25)
     private String login;
 
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false, length = 60)
     private String password;
 
     @Column(nullable = false, length = 35)
@@ -45,9 +45,31 @@ public class User {
     private BigDecimal sumSpended;
 
     @ManyToOne
-    @JoinColumn(name="discount_id")
+    @JoinColumn(name = "discount_id")
     private Discount discount;
 
     @OneToOne(mappedBy = "user")
     private Cart cart;
+
+    public User(String name, String surname, String login, String password, String email, Role role, UserStatus userStatus, BigDecimal sumSpended, Discount discount) {
+        this.name = name;
+        this.surname = surname;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.userStatus = userStatus;
+        this.sumSpended = sumSpended;
+        this.discount = discount;
+    }
+
+    public User(String name, String surname, String login, String password, String email, Role role, UserStatus userStatus) {
+        this.name = name;
+        this.surname = surname;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.userStatus = userStatus;
+    }
 }

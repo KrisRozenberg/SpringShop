@@ -11,4 +11,6 @@ public interface ProductService {
     List<Product> findAll();
 
     Optional<Integer> findQuantityByProductId(Long id);
+
+    void updateImageUrlById(Long id, String imageUrl);
 }

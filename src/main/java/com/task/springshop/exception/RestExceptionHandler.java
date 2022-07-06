@@ -20,4 +20,12 @@ public class RestExceptionHandler {
 
         return new ResponseEntity<>(new ErrorResponse(messages), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<ErrorResponse> handleApplicationException(ApplicationException exception, WebRequest request) {
+        String message = exception.getMessage();
+        log.error(message);
+
+        return new ResponseEntity<>(new ErrorResponse(List.of(message)), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -1,5 +1,6 @@
 package com.task.springshop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,15 @@ public class Cart {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy="cart")
+    @JsonIgnore
     private Set<CartProduct> cartProducts;
+
+    public Cart(User user, Set<CartProduct> cartProducts) {
+        this.user = user;
+        this.cartProducts = cartProducts;
+    }
 }

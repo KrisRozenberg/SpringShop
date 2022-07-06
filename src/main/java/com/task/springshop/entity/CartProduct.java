@@ -54,4 +54,13 @@ public class CartProduct {
         this.product = product;
         this.order = order;
     }
+
+    public CartProduct(Integer quantity, CartProductStatus status, BigDecimal finalPrice, Cart cart, Product product, Order order) {
+        this.quantity = quantity;
+        this.status = status;
+        this.finalPrice = finalPrice;
+        this.cart = cart;
+        this.product = product;
+        this.order = order;
+    }
 }

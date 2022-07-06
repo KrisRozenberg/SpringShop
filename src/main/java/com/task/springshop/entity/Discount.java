@@ -1,5 +1,6 @@
 package com.task.springshop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,12 @@ public class Discount {
     private int sumSpended;
 
     @OneToMany(mappedBy="discount")
+    @JsonIgnore
     private Set<User> users;
+
+    public Discount(BigDecimal discount, int sumSpended, Set<User> users) {
+        this.discount = discount;
+        this.sumSpended = sumSpended;
+        this.users = users;
+    }
 }

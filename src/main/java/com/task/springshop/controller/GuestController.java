@@ -5,9 +5,8 @@ import com.task.springshop.exception.ValidationException;
 import com.task.springshop.service.CartProductService;
 import com.task.springshop.service.OrderService;
 import com.task.springshop.service.ProductService;
-import com.task.springshop.util.OrderInfo;
+import com.task.springshop.util.UnsignedOrderInfo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,8 +20,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequiredArgsConstructor
-@Slf4j
-public class ResourceController {
+public class GuestController {
     private final ProductService productService;
     private final CartProductService cartProductService;
     private final OrderService orderService;
@@ -34,8 +32,8 @@ public class ResourceController {
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
-    @PostMapping("/makeOrder")
-    public ResponseEntity<?> makeOrder(@Valid @RequestBody OrderInfo orderInfo, BindingResult bindingResult) {
+    @PostMapping("/makeUnsignedOrder")
+    public ResponseEntity<?> makeUnsignedOrder(@Valid @RequestBody UnsignedOrderInfo unsignedOrderInfo, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
         {
             List<String> errors = new ArrayList<>();
@@ -48,8 +46,8 @@ public class ResourceController {
             throw new ValidationException(errors);
         }
 
-        BigDecimal price = cartProductService.calculateOrderPrice(orderInfo.getProductQuantity(), orderInfo.isDelivery());
-        orderService.addUnsignedOrder(orderInfo, price);
+        BigDecimal price = cartProductService.calculateOrderPrice(unsignedOrderInfo.getProductQuantity(), unsignedOrderInfo.isDelivery());
+        orderService.addUnsignedOrder(unsignedOrderInfo, price);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
